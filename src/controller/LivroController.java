@@ -1,6 +1,7 @@
 package controller;
 
 import DAO.LivroDAO;
+import model.Genero;
 import model.Livro;
 
 import java.util.List;

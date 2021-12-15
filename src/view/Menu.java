@@ -64,25 +64,27 @@ public class Menu {
     public void Listar(){
         String leitura = JOptionPane.showInputDialog("[1] - Listar Livros de uma Biblioteca\n[2] - Listar Livros de um Genero ");
         switch (Integer.parseInt(leitura)){
-            case 1: this.ChooseBibliotecaView();
-            case 2: this.ChooseGeneroView();
+            case 1: this.ReadIdBibliotecaView(); this.ChooseBibliotecaView();
+            case 2: this.ReadidGeneroView(); this.ChooseGeneroView();
         }
     }
     public void BuscarPorID(){
+        this.ReadidLivroView();
         this.ChooseLivroView();
 
     }
     public void EditarGenero(){
-        List<Livro> livros = this.ReadLivroView();
+        this.ReadidGeneroView();
+        List<Genero> generos = generoController.ReadGenero();
+
         String leituraIdLivro = JOptionPane.showInputDialog("Digite o Id do Livro para editar seu genero: ");
         int idGenero = Integer.parseInt(leituraIdLivro);
-        for(int i = 0; i< livros.size(); i++){
-            if(livros.get(i).getGenero().getIdGenero() == idGenero){
-                Livro livro = livros.get(i);
+
+        for(int i = 0; i< generos.size(); i++){
+            if(generos.get(i).getIdGenero() == idGenero){
+                Genero genero = generos.get(i);
                 String leituraNome = JOptionPane.showInputDialog("Digite o Nome do Genero a ser Editado: ");
-                Genero genero = new Genero();
                 genero.setNome(leituraNome);
-                livro.setGenero(genero);
 
                 generoController.editaGenero(genero);
             }
@@ -131,7 +133,7 @@ public class Menu {
 
     public void ChooseBibliotecaView(){
         int idBiblioteca;
-        List<Livro> livros = this.ReadLivroView();
+        List<Livro> livros = livroController.ReadLivros();
 
         String leituraId = JOptionPane.showInputDialog("  Informe ID do Biblioteca escolhida: ");
         idBiblioteca = Integer.parseInt(leituraId);
@@ -145,7 +147,7 @@ public class Menu {
 
     public void ChooseGeneroView(){
         int idGenero;
-        List<Livro> livros = this.ReadLivroView();
+        List<Livro> livros = livroController.ReadLivros();
 
         String leituraId = JOptionPane.showInputDialog("  Informe ID do Genero escolhido: ");
         idGenero = Integer.parseInt(leituraId);
@@ -159,7 +161,7 @@ public class Menu {
 
     public void ChooseLivroView(){
         int idLivro;
-        List<Livro> livros = ReadLivroView();
+        List<Livro> livros = livroController.ReadLivros();
 
         String leituraId = JOptionPane.showInputDialog("  Informe ID do Livro escolhido: ");
         idLivro = Integer.parseInt(leituraId);

@@ -3,8 +3,11 @@ package DAO;
 import Factory.ConnectionFactory;
 import model.Biblioteca;
 import model.Genero;
+import model.Livro;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GeneroDAO {
 
@@ -70,7 +73,7 @@ public class GeneroDAO {
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setString(1,generoModel.getNome());;
+            statement.setString(1,generoModel.getNome());
             statement.setInt(2,generoModel.getIdGenero());
 
             statement.execute();
@@ -80,6 +83,31 @@ public class GeneroDAO {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public List<Genero> listarGeneros(){
+        String sql = "SELECT * FROM genero";
+        try{
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList generos = new ArrayList();
+
+            while(resultSet.next()){
+                Genero genero = new Genero();
+                BibliotecaDAO bibliotecaDAO = new BibliotecaDAO();
+                GeneroDAO generoDAO = new GeneroDAO();
+
+                genero.setIdGenero(resultSet.getInt("idGenero"));
+                genero.setNome(resultSet.getString("nome"));
+
+                generos.add(genero);
+            }
+            return generos;
+
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 
 }
