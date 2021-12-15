@@ -2,7 +2,7 @@ package model;
 
 public class Biblioteca {
     String nome;
-    int idBlioteca;
+    int idBiblioteca;
 
     public Biblioteca() {
 
@@ -10,7 +10,7 @@ public class Biblioteca {
 
     public Biblioteca(String nome, int idBlioteca) {
         this.nome = nome;
-        this.idBlioteca = idBlioteca;
+        this.idBiblioteca = idBlioteca;
     }
 
     public String getNome() {
@@ -21,19 +21,19 @@ public class Biblioteca {
         this.nome = nome;
     }
 
-    public int getIdBlioteca() {
-        return idBlioteca;
+    public int getIdBiblioteca() {
+        return idBiblioteca;
     }
 
-    public void setIdBlioteca(int idBlioteca) {
-        this.idBlioteca = idBlioteca;
+    public void setIdBiblioteca(int idBlioteca) {
+        this.idBiblioteca = idBlioteca;
     }
 
     @Override
     public String toString() {
         return "Biblioteca{" +
                 "nome='" + nome + '\'' +
-                ", idBlioteca=" + idBlioteca +
+                ", idBlioteca=" + idBiblioteca +
                 '}';
     }
 }

@@ -8,7 +8,6 @@ import model.Genero;
 public class GeneroController {
     GeneroDAO generoDAO = new GeneroDAO();
 
-    public void CreateGenero(Genero generoModel) {
-        generoDAO.cadastrarGenero(generoModel);
-    }
+    public void CreateGenero(Genero generoModel) {generoDAO.cadastrarGenero(generoModel);}
+    public void editaGenero(Genero generoModel){generoDAO.editaGenero(generoModel);}
 }

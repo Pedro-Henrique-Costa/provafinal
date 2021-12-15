@@ -4,9 +4,7 @@ import Factory.ConnectionFactory;
 import model.Biblioteca;
 import model.Livro;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class BibliotecaDAO {
 
@@ -28,20 +26,45 @@ public class BibliotecaDAO {
         }
     }
 
-    public Biblioteca cadastrarBiblioteca(Biblioteca bibliotecaModel){
+    public void cadastrarBiblioteca(Biblioteca bibliotecaModel){
         String sql = "INSERT INTO biblioteca(nome) VALUES (?)";
         try{
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1,bibliotecaModel.getNome());
-
             statement.execute();
-            statement.close();
 
-            return bibliotecaModel;
+            ResultSet resultSet = statement.getGeneratedKeys();
+
+            while (resultSet.next()){
+                bibliotecaModel.setIdBiblioteca(resultSet.getInt(1));
+            }
 
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
+    }
+
+    public Biblioteca buscaBibliotecaPorId(int idBiblioteca) {
+        String sql = "SELECT * FROM biblioteca WHERE idBiblioteca = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idBiblioteca);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()){
+                Biblioteca biblioteca = new Biblioteca();
+                biblioteca.setIdBiblioteca(resultSet.getInt("idBiblioteca"));
+                biblioteca.setNome(resultSet.getString("nome"));
+
+                return biblioteca;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
 
 }

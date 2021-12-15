@@ -4,9 +4,7 @@ import Factory.ConnectionFactory;
 import model.Biblioteca;
 import model.Genero;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class GeneroDAO {
 
@@ -26,20 +24,62 @@ public class GeneroDAO {
         }
     }
 
-    public Genero cadastrarGenero(Genero generoModel){
+    public void cadastrarGenero(Genero generoModel){
         String sql = "INSERT INTO genero(nome) VALUES (?)";
         try{
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1,generoModel.getNome());
-
             statement.execute();
-            statement.close();
 
-            return generoModel;
+            ResultSet resultSet = statement.getGeneratedKeys();
+
+            while (resultSet.next()){
+                generoModel.setIdGenero(resultSet.getInt(1));
+            }
 
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
+    }
+
+    public Genero buscaGeneroPorId(int idGenero) {
+        String sql = "SELECT * FROM genero WHERE idGenero = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idGenero);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()){
+                Genero genero = new Genero();
+                genero.setIdGenero(resultSet.getInt("idGenero"));
+                genero.setNome(resultSet.getString("nome"));
+
+                return genero;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    public void editaGenero(Genero generoModel){
+        String sql = "UPDATE genero SET nome = ? WHERE idGenero = ?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1,generoModel.getNome());;
+            statement.setInt(2,generoModel.getIdGenero());
+
+            statement.execute();
+            statement.close();
+
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
     }
 
 }
